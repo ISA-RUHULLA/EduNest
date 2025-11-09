@@ -6,18 +6,13 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const { registerUser, loading,} = useAuth();
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(""); // state for role
   const navigate = useNavigate();
 
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (!role) {
-      alert("Please select a role!");
-      return;
-    }
 
     try {
       // 1️⃣ Firebase auth registration
@@ -32,8 +27,8 @@ const Register = () => {
         },
         body: JSON.stringify({
           uid: user.uid,
+          name: name,
           email: user.email,
-          role: role,
         }),
       });
 
@@ -55,6 +50,15 @@ const Register = () => {
         <div className="card bg-base-100 w-full max-w-md shrink-0 shadow-2xl p-6">
           <div className="card-body">
             <form onSubmit={handleRegister} className="fieldset space-y-4">
+              <label className="label font-medium">Name</label>
+              <input
+                type="text"
+                className="input input-bordered w-full text-base"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
               <label className="label font-medium">Email</label>
               <input
                 type="email"
@@ -74,18 +78,6 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-
-              <label className="label font-medium">Role</label>
-              <select
-                className="select select-bordered w-full"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              >
-                <option value="">Select Role</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-              </select>
 
               <button
                 type="submit"
