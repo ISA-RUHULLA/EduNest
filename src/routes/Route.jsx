@@ -16,6 +16,7 @@ import StudentCourses from "../pages/Dashboard/Student/StudentCourses";
 import TeacherCourses from "../pages/Dashboard/Teacher/TeacherCourses";
 import TeacherProfile from "../pages/Dashboard/Teacher/TeacherProfile";
 import RoleBasedRoute from "./RolebaseRoute";
+import AboutUs from "../pages/Home/AboutUs";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
                 path: "/courses",
                 element: <Courses />
             },
+            {
+                path: "/about",
+                element: <AboutUs />
+            },
             { path: "/courses/:id", element: <CourseDetails /> },
             { path: "/login", element: <Login /> },
             { path: "/register", element: <Register /> },
@@ -42,7 +47,7 @@ const router = createBrowserRouter([
         children: [
             // Student routes
             {
-                path: "student/home",
+                path: "student/dashboard",
                 element: (
                     <RoleBasedRoute allowedRole="student">
                         <StudentDashboard />

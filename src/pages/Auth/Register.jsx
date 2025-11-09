@@ -1,39 +1,48 @@
-import { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import React, { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../Firebase/firebase.config";
+
 
 const Register = () => {
+  const { registerUser, loading,} = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState(""); // state for role
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    const role = e.target.role.value;
+    if (!role) {
+      alert("Please select a role!");
+      return;
+    }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // 1️⃣ Firebase auth registration
+      const userCredential = await registerUser(email, password);
       const user = userCredential.user;
 
-      await updateProfile(user, { displayName: name });
-
-
-      await fetch("https://your-server.vercel.app/users", {
+      // 2️⃣ Save role to backend
+      await fetch("http://localhost:5000/users", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid: user.uid, name, email, role }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          role: role,
+        }),
       });
 
+      alert("Registration successful!");
+      // Optional: redirect to dashboard
       navigate("/dashboard");
     } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
+      console.error(error.message);
+      alert("Error: " + error.message);
     }
   };
 
@@ -45,13 +54,15 @@ const Register = () => {
         </div>
         <div className="card bg-base-100 w-full max-w-md shrink-0 shadow-2xl p-6">
           <div className="card-body">
-
-            <form onSubmit={handleRegister} className="fieldset space-y-2">
+            <form onSubmit={handleRegister} className="fieldset space-y-4">
               <label className="label font-medium">Email</label>
               <input
                 type="email"
                 className="input input-bordered w-full text-base"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
 
               <label className="label font-medium">Password</label>
@@ -59,13 +70,28 @@ const Register = () => {
                 type="password"
                 className="input input-bordered w-full text-base"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
-              <select className="bg-gray-500 text-white" name="role" required>
+
+              <label className="label font-medium">Role</label>
+              <select
+                className="select select-bordered w-full"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                required
+              >
                 <option value="">Select Role</option>
                 <option value="student">Student</option>
                 <option value="teacher">Teacher</option>
               </select>
-              <button type="submit" disabled={loading} className="btn btn-neutral w-full mt-4 text-base">
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-neutral w-full mt-4 text-base"
+              >
                 {loading ? "Registering..." : "Register"}
               </button>
             </form>
@@ -73,8 +99,6 @@ const Register = () => {
         </div>
       </div>
     </div>
-
-
   );
 };
 
