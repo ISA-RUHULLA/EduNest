@@ -1,10 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const CourseDetails = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const {user} = useAuth();
+
+  const handleEnroll = async () => {
+    if (!user) {
+      toast.error("Please log in to enroll in this course.");
+      return;
+    }
+    try{
+      const res = await fetch("http://localhost:5000/enroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId: course._id,
+          userEmail: user.email,
+          courseTitle: course.title
+        }),
+      });
+      const data = await res.json();
+      if(data.success){
+      toast.success("Successfully enrolled in the course!");}
+      else{
+        toast.error(data.message || "Enrollment failed.");
+      }
+    } catch (error) {
+      toast.error("Failed to enroll in the course.");
+    }
+  };
 
   useEffect(() => {
     fetch(`http://localhost:5000/courses/${id}`)
@@ -56,7 +86,7 @@ const CourseDetails = () => {
           </div>
 
           <div className="flex gap-4 mt-4 w-full">
-            <button className="btn btn-primary w-2/3">Enroll Now</button>
+            <button onClick={handleEnroll} className="btn btn-primary w-2/3">Enroll Now</button>
             <Link to="/courses" className="btn btn-outline w-1/3">
               Back to Courses
             </Link>
