@@ -4,7 +4,7 @@ const CourseCard = () => {
     return (
         <div>
             <div className='text-3xl font-bold flex justify-center text-center'>
-                <h2>Our Courses</h2>
+                <h2>Popular Courses</h2>
             </div>
             <div className='grid grid-cols-3 gap-4 m-8'>
                 <div className="card w-96 bg-base-100 shadow-sm">
