@@ -1,12 +1,12 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 
 const PrivateRoute = ({ children }) => {
-    const { user, loading } = useAuth();
+    const { user, loading } = useContext(AuthContext);
     const location = useLocation();
 
-    // 🔹 Step 1: Show loader while checking auth state
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -15,13 +15,11 @@ const PrivateRoute = ({ children }) => {
         );
     }
 
-    // 🔹 Step 2: If user is logged in, allow access
-    if (user) {
-        return children;
+    if (!user) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    // 🔹 Step 3: If not logged in, redirect to login
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return children;
 };
 
 export default PrivateRoute;

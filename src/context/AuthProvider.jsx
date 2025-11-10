@@ -4,6 +4,8 @@ import {
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
+    setPersistence,
+    browserLocalPersistence
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.config";
 
@@ -11,7 +13,12 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // 🔹 true দিয়ে শুরু
+
+    // Firebase persistence set করা
+    useEffect(() => {
+        setPersistence(auth, browserLocalPersistence).catch(err => console.error(err));
+    }, []);
 
     const registerUser = async (email, password) => {
         setLoading(true);
@@ -40,20 +47,10 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    // 🔹 onAuthStateChanged
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            if (currentUser) {
-                try {
-                    const res = await fetch(`http://localhost:5000/users/${currentUser.uid}`);
-                    const data = await res.json();
-                    setUser({ uid: currentUser.uid, email: currentUser.email, role: data.role });
-                } catch (err) {
-                    console.error("Failed to fetch user role:", err.message);
-                    setUser({ uid: currentUser.uid, email: currentUser.email });
-                }
-            } else {
-                setUser(null);
-            }
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
             setLoading(false);
         });
 

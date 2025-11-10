@@ -16,7 +16,7 @@ const MyAddedCourses = () => {
         fetch(`http://localhost:5000/courses/user/${user.email}`)
             .then((res) => res.json())
             .then((data) => setCourses(data))
-            .catch((err) => toast.error("Failed to fetch courses"))
+            .catch((err) => toast.error("Failed to fetch courses", err))
             .finally(() => setLoading(false));
     }, [user]);
 
@@ -32,11 +32,11 @@ const MyAddedCourses = () => {
                 toast.success("✅ Course deleted successfully");
                 setCourses(courses.filter((c) => c._id !== id)); // UI update
             } else {
-                toast.error("❌ Failed to delete course");
+                toast.error(" Failed to delete course");
             }
         } catch (err) {
             console.error(err);
-            toast.error("⚠️ Something went wrong!");
+            toast.error("Something went wrong!");
         }
     };
 
@@ -60,7 +60,7 @@ const MyAddedCourses = () => {
                         alt={course.title}
                         className="w-full h-32 object-cover rounded mb-2"
                     />
-                    <h3 className="font-semibold">{course.title}</h3>
+                    <h3 className="font-bold text-black">{course.title}</h3>
                     <p className="text-gray-500 text-sm">{course.category}</p>
                     <div className="flex justify-between mt-2">
                         <button

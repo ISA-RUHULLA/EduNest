@@ -9,10 +9,19 @@ const UpdateCourse = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
+            toast.error("Invalid course ID");
+            setLoading(false);
+            return;
+        }
+
         fetch(`http://localhost:5000/courses/${id}`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error("Course not found");
+                return res.json();
+            })
             .then((data) => setFormData(data))
-            .catch((err) => toast.error("Failed to fetch course"))
+            .catch((err) => toast.error(err.message))
             .finally(() => setLoading(false));
     }, [id]);
 
@@ -24,20 +33,22 @@ const UpdateCourse = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const { _id, ...dataToUpdate } = formData; // Remove _id
             const res = await fetch(`http://localhost:5000/courses/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(dataToUpdate),
             });
+
             const data = await res.json();
-            if (data.success) {
+            if (res.ok && data.success) {
                 toast.success("✅ Course updated successfully");
                 navigate("/dashboard/my-added-courses");
             } else {
-                toast.error("❌ Failed to update course");
+                toast.error(data.message || "❌ Failed to update course");
             }
         } catch (err) {
-            toast.error("⚠️ Something went wrong!");
+            toast.error("⚠️ Something went wrong! " + err.message);
         }
     };
 
