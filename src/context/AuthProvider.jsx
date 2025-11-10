@@ -5,7 +5,9 @@ import {
     signInWithEmailAndPassword,
     signOut,
     setPersistence,
-    browserLocalPersistence
+    browserLocalPersistence,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.config";
 
@@ -20,6 +22,7 @@ const AuthProvider = ({ children }) => {
         setPersistence(auth, browserLocalPersistence).catch(err => console.error(err));
     }, []);
 
+    //  Email/Password register
     const registerUser = async (email, password) => {
         setLoading(true);
         try {
@@ -29,6 +32,7 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    //  Email/Password login
     const loginUser = async (email, password) => {
         setLoading(true);
         try {
@@ -38,6 +42,19 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    //  Google Sign-In
+    const signInWithGoogle = async () => {
+        setLoading(true);
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            return result;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    //  Logout
     const logoutUser = async () => {
         setLoading(true);
         try {
@@ -47,7 +64,7 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    // 🔹 onAuthStateChanged
+    //  Auth state listener
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -62,8 +79,10 @@ const AuthProvider = ({ children }) => {
         loading,
         registerUser,
         loginUser,
+        signInWithGoogle,
         logoutUser,
         setLoading,
+        auth,
     };
 
     return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
