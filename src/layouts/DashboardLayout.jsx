@@ -13,7 +13,7 @@ const DashboardLayout = () => {
                 <Navber />
             </div>
             <div className="flex min-h-screen">
-                <aside className="w-64 bg-gray-800 text-white p-6">
+                <aside className="w-64 bg-blue-800 text-white p-6">
                     <nav className="space-y-4">
                         <Link to="/dashboard" className="btn btn-primary block py-2 px-4 rounded hover:bg-gray-700">Dashboard</Link>
                         <Link to="/dashboard/my-courses" className="btn btn-primary block py-2 px-4 rounded hover:bg-gray-700">My Enrolled</Link>
@@ -21,7 +21,7 @@ const DashboardLayout = () => {
                         <Link to="/dashboard/my-added-courses" className="btn btn-primary block py-2 px-4 rounded hover:bg-gray-700">My Add Course</Link>
                     </nav>
                 </aside>
-                <main className="flex-1 p-6 bg-gray-100">
+                <main className="flex-1 p-6 bg-blue-300">
                     <Outlet />
                 </main>
             </div>

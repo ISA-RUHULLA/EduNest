@@ -12,6 +12,8 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import MyEnrolled from "../pages/Dashboard/MyEnrolled";
 import MyAddedCourse from "../pages/Dashboard/MyAddedCourse";
 import AddCourse from "../pages/Dashboard/AddCourse";
+import UpdateCourse from "../pages/Dashboard/UpdateCourse";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
                 element: <Courses />
             },
             {
+                path: "/course/:id",
+                element: <CourseDetails />,
+            },
+            {
                 path: "/about",
                 element: <AboutUs />
             },
@@ -38,27 +44,31 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <DashboardLayout />,
+        element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
         children: [
-            
+
             {
                 path: "/dashboard",
-                element: <Dashboard/>
+                element: <Dashboard />
             },
             {
                 path: "my-courses",
-                element: <MyEnrolled/>
+                element: <MyEnrolled />
             },
             {
                 path: "my-added-courses",
-                element:<MyAddedCourse/>
+                element: <MyAddedCourse />
             },
             {
                 path: "add-courses",
-                element: <AddCourse/>
+                element: <AddCourse />
             },
+            {
+                path: "update-course/:id",
+                element: <UpdateCourse />
+            }
 
-    
+
         ],
     },
 ])

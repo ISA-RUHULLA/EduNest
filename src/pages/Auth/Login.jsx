@@ -13,33 +13,35 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // 🔹 Step 1: Firebase authentication
+      // 🔹 Step 1: Firebase Authentication
       const userCredential = await loginUser(email, password);
       const user = userCredential.user;
 
-      // 🔹 Step 2: Fetch user data from backend
+      // 🔹 Step 2: Check if user exists in backend DB
       const res = await fetch(`http://localhost:5000/users/${user.uid}`);
-      if (!res.ok) throw new Error("Failed to fetch user role");
+      const data = await res.json();
 
-      const userData = await res.json();
-      console.log("Fetched user data:", userData);
-
-      if (userData?.email && userData?.role) {
-        alert(`Welcome back, ${userData.role}!`);
-
-        // 🔹 Step 3: Navigate based on role
-        if (userData.role === "student") {
-          navigate("/dashboard/student/dashboard", { replace: true });
-        } else if (userData.role === "teacher") {
-          navigate("/dashboard/teacher/home", { replace: true });
-        } else {
-          navigate("/", { replace: true }); // fallback
-        }
+      if (res.ok && data?.email) {
+        // 🔹 Step 3: Success message & redirect
+        alert(`Welcome back, ${data.displayName || "User"}!`);
+        navigate("/"); // redirect to homepage
       } else {
-        alert("User not found in database!");
+        // 🔹 Step 4: If not found, create user in backend
+        await fetch("http://localhost:5000/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName || "New User",
+            email: user.email,
+          }),
+        });
+
+        alert("New account synced successfully!");
+        navigate("/");
       }
     } catch (error) {
-      console.error("Login error:", error.message);
+      console.error("Login error:", error);
       alert("Login failed! " + error.message);
     } finally {
       setLoading(false);
@@ -52,33 +54,35 @@ const Login = () => {
         <div className="text-center mb-6">
           <h1 className="text-3xl font-semibold">Login to your account</h1>
         </div>
+
         <div className="card bg-base-100 w-full max-w-md shadow-2xl p-6">
           <div className="card-body">
-            <form onSubmit={handleLogin} className="fieldset space-y-4">
-              <label className="label font-medium">Email</label>
-              <input
-                type="email"
-                className="input input-bordered w-full text-base"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="label font-medium">Email</label>
+                <input
+                  type="email"
+                  className="input input-bordered w-full"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-              <label className="label font-medium">Password</label>
-              <input
-                type="password"
-                className="input input-bordered w-full text-base"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div>
+                <label className="label font-medium">Password</label>
+                <input
+                  type="password"
+                  className="input input-bordered w-full"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-              <button
-                type="submit"
-                className="btn btn-neutral w-full mt-4 text-base"
-              >
+              <button type="submit" className="btn btn-neutral w-full mt-4">
                 Login
               </button>
             </form>

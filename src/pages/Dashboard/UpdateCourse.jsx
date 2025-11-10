@@ -1,70 +1,58 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import useAuth from "../../hooks/useAuth";
 
-const AddCourse = () => {
-    const { user } = useAuth();
+const UpdateCourse = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    const [formData, setFormData] = useState({
-        title: "",
-        thumbnail: "",
-        short_description: "",
-        price: "",
-        rating: "",
-        duration: "",
-        lessons: "",
-        category: "",
-    });
+    useEffect(() => {
+        fetch(`http://localhost:5000/courses/${id}`)
+            .then((res) => res.json())
+            .then((data) => setFormData(data))
+            .catch((err) => toast.error("Failed to fetch course"))
+            .finally(() => setLoading(false));
+    }, [id]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const courseData = {
-            ...formData,
-            instructor: user?.displayName || "Anonymous",
-            instructor_email: user?.email,
-        };
-
-        fetch("http://localhost:5000/courses", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(courseData),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    toast.success("🎉 Course added successfully!");
-                    setTimeout(() => {
-                        navigate("/dashboard/my-added-courses");
-                    }, 1500);
-                } else {
-                    toast.error("❌ Failed to add course!");
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                toast.error("⚠️ Something went wrong!");
+        try {
+            const res = await fetch(`http://localhost:5000/courses/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
             });
+            const data = await res.json();
+            if (data.success) {
+                toast.success("✅ Course updated successfully");
+                navigate("/dashboard/my-added-courses");
+            } else {
+                toast.error("❌ Failed to update course");
+            }
+        } catch (err) {
+            toast.error("⚠️ Something went wrong!");
+        }
     };
+
+    if (loading) return <p className="text-center mt-10">Loading...</p>;
 
     return (
         <div className="max-w-xl mx-auto bg-blue-400 shadow-lg rounded-xl p-6 mt-8">
             <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
-                🚀 Launch a New Course
+                ✏️ Update Course
             </h2>
-
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                     type="text"
                     name="title"
-                    value={formData.title}
+                    value={formData.title || ""}
                     onChange={handleChange}
                     placeholder="Course Title"
                     className="w-full border p-2 rounded"
@@ -73,7 +61,7 @@ const AddCourse = () => {
                 <input
                     type="url"
                     name="thumbnail"
-                    value={formData.thumbnail}
+                    value={formData.thumbnail || ""}
                     onChange={handleChange}
                     placeholder="Thumbnail URL"
                     className="w-full border p-2 rounded"
@@ -81,7 +69,7 @@ const AddCourse = () => {
                 />
                 <textarea
                     name="short_description"
-                    value={formData.short_description}
+                    value={formData.short_description || ""}
                     onChange={handleChange}
                     placeholder="Short Description"
                     className="w-full border p-2 rounded"
@@ -91,7 +79,7 @@ const AddCourse = () => {
                     <input
                         type="number"
                         name="price"
-                        value={formData.price}
+                        value={formData.price || ""}
                         onChange={handleChange}
                         placeholder="Price"
                         className="w-full border p-2 rounded"
@@ -99,7 +87,7 @@ const AddCourse = () => {
                     <input
                         type="number"
                         name="rating"
-                        value={formData.rating}
+                        value={formData.rating || ""}
                         onChange={handleChange}
                         placeholder="Rating"
                         step="0.1"
@@ -111,15 +99,15 @@ const AddCourse = () => {
                     <input
                         type="text"
                         name="duration"
-                        value={formData.duration}
+                        value={formData.duration || ""}
                         onChange={handleChange}
-                        placeholder="Duration (e.g., 10 hours)"
+                        placeholder="Duration"
                         className="w-full border p-2 rounded"
                     />
                     <input
                         type="number"
                         name="lessons"
-                        value={formData.lessons}
+                        value={formData.lessons || ""}
                         onChange={handleChange}
                         placeholder="Lessons"
                         className="w-full border p-2 rounded"
@@ -128,21 +116,20 @@ const AddCourse = () => {
                 <input
                     type="text"
                     name="category"
-                    value={formData.category}
+                    value={formData.category || ""}
                     onChange={handleChange}
-                    placeholder="Category (e.g., Web Development)"
+                    placeholder="Category"
                     className="w-full border p-2 rounded"
                 />
-
                 <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
                 >
-                    Add Course
+                    Update Course
                 </button>
             </form>
         </div>
     );
 };
 
-export default AddCourse;
+export default UpdateCourse;
