@@ -1,20 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useAnimation } from "framer-motion";
 
 const CourseCard = () => {
     const [courses, setCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("All");
     const navigate = useNavigate();
 
     useEffect(() => {
         fetch("http://localhost:5000/courses")
             .then((res) => res.json())
             .then((data) => {
-                const topCourses = data.sort((a, b) => b.rating - a.rating);
-                setCourses(topCourses);
+                const sorted = data.sort((a, b) => b.rating - a.rating);
+                setCourses(sorted);
+                setFilteredCourses(sorted);
+
+                // 🔹 Extract unique categories
+                const cats = ["All", ...new Set(data.map(course => course.category))];
+                setCategories(cats);
             })
             .catch((error) => console.error("Error fetching courses:", error));
     }, []);
+
+    // 🔹 Handle category change
+    const handleCategoryChange = (cat) => {
+        setSelectedCategory(cat);
+        if (cat === "All") {
+            setFilteredCourses(courses);
+        } else {
+            const filtered = courses.filter(course => course.category === cat);
+            setFilteredCourses(filtered);
+        }
+    };
 
     const handleViewDetails = (id) => {
         navigate(`/course/${id}`);
@@ -24,10 +43,30 @@ const CourseCard = () => {
         <div className="p-6 md:p-10 bg-blue-800 rounded-lg my-4">
             <div>
                 <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">🏆 Top Rated Courses</h2>
-                <p className="text-white text-center mb-10">Explore our top-rated courses, carefully curated to help you <br /> achieve your learning goals with expert instructors and comprehensive content.</p>
+                <p className="text-white text-center mb-6">
+                    Explore our top-rated courses, carefully curated to help you achieve your learning goals.
+                </p>
+
+                {/* 🔹 Category Filter */}
+                <div className="flex justify-center flex-wrap gap-2 mb-10">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat}
+                            className={`px-4 py-2 rounded-lg font-semibold ${
+                                selectedCategory === cat
+                                    ? "bg-white text-blue-800"
+                                    : "bg-blue-600 text-white hover:bg-blue-500"
+                            }`}
+                            onClick={() => handleCategoryChange(cat)}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
             </div>
+
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {courses.map((course, index) => (
+                {filteredCourses.map((course, index) => (
                     <AnimatedCourseCard
                         key={course._id}
                         course={course}
@@ -35,6 +74,12 @@ const CourseCard = () => {
                         handleViewDetails={handleViewDetails}
                     />
                 ))}
+            </div>
+
+            <div className="flex items-center justify-center mt-6">
+                <Link to="/" className="btn btn-primary mt-4">
+                    Back to Home
+                </Link>
             </div>
         </div>
     );
@@ -57,7 +102,7 @@ const AnimatedCourseCard = ({ course, index, handleViewDetails }) => {
                             transition: { duration: 0.6, delay: index * 0.1 },
                         });
                     } else {
-                        controls.start({ opacity: 0, y: 80 }); // scroll out animation
+                        controls.start({ opacity: 0, y: 80 });
                     }
                 });
             },
@@ -88,12 +133,11 @@ const AnimatedCourseCard = ({ course, index, handleViewDetails }) => {
             </div>
             <div className="flex justify-between mt-4 gap-2 w-full">
                 <button
-                    className="btn btn-primary w-1/2"
+                    className="btn btn-primary w-full"
                     onClick={() => handleViewDetails(course._id)}
                 >
                     View Details
                 </button>
-                <button className="btn btn-primary w-1/2">Enroll Now</button>
             </div>
         </motion.div>
     );
