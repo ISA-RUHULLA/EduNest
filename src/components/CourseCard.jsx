@@ -1,65 +1,81 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const CourseCard = () => {
-    const [courses, setCourses] = useState([]);
-    const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        fetch("http://localhost:5000/courses")
-            .then((res) => res.json())
-            .then((data) => {
-                // 🔹 Sort by rating (descending) & take top 6
-                const topCourses = data
-                    .sort((a, b) => b.rating - a.rating)
-                    .slice(0, 6);
-                setCourses(topCourses);
-            })
-            .catch((error) => console.error("Error fetching courses:", error));
-    }, []);
+  useEffect(() => {
+    fetch("http://localhost:5000/courses")
+      .then((res) => res.json())
+      .then((data) => {
+        //  Sort & slice 
+        const topCourses = data
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 6);
+        setCourses(topCourses);
+      })
+      .catch((error) => console.error("Error fetching courses:", error));
+  }, []);
 
-    // 🔹 Handle course details navigation
-    const handleViewDetails = (id) => {
-        navigate(`/course/${id}`);
-    };
+  //  Handle course details navigation
+  const handleViewDetails = (id) => {
+    navigate(`/course/${id}`);
+  };
 
-    return (
-        <div className="p-6">
-            <h2 className="text-2xl font-bold mb-6 text-center">🏆 Top Rated Courses</h2>
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-                {courses.map((course) => (
-                    <div
-                        key={course._id}
-                        className="border rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300"
-                    >
-                        <img
-                            src={course.thumbnail}
-                            alt={course.title}
-                            className="rounded-lg mb-3 w-full h-48 object-cover"
-                        />
-                        <h2 className="text-lg font-semibold">{course.title}</h2>
-                        <p className="text-gray-500 text-sm">{course.instructor}</p>
-                        <p className="text-sm mt-2">{course.short_description}</p>
-                        <div className="flex justify-between items-center mt-3">
-                            <span className="font-bold text-blue-600">${course.price}</span>
-                            <span className="text-yellow-500 font-medium">
-                                ⭐ {course.rating}
-                            </span>
-                        </div>
-                        <div className="flex justify-between mt-4 gap-2 w-full">
-                            <button
-                                className="btn btn-primary w-1/2"
-                                onClick={() => handleViewDetails(course._id)}
-                            >
-                                View Details
-                            </button>
-                            <button className="btn btn-primary w-1/2">Enroll Now</button>
-                        </div>
-                    </div>
-                ))}
+  return (
+    <div className="p-6 my-4 bg-blue-800 rounded-lg">
+      <div>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center text-white">
+         Top Rated Courses
+      </h2>
+      <p className="text-white text-center mb-10">Explore our top-rated courses, carefully curated to help you <br /> achieve your learning goals with expert instructors and comprehensive content.</p>
+      </div>
+
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
+        {courses.map((course, index) => (
+          <motion.div
+            key={course._id}
+            initial={{ opacity: 0, y: 60 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{
+              duration: 0.6,
+              delay: index * 0.15, 
+              ease: "easeOut",
+            }}
+            viewport={{ once: false, amount: 0.2 }}
+            className="rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300  bg-blue-900 text-white text-center"
+          >
+            <img
+              src={course.thumbnail}
+              alt={course.title}
+              className="rounded-lg mb-3 w-full h-48 object-cover"
+            />
+            <h2 className="text-lg font-semibold">{course.title}</h2>
+            <p className="text-gray-500 text-sm">{course.instructor}</p>
+            <p className="text-sm mt-2">{course.short_description}</p>
+
+            <div className="flex justify-between items-center mt-3">
+              <span className="font-bold text-blue-600">${course.price}</span>
+              <span className="text-yellow-500 font-medium">
+                ⭐ {course.rating}
+              </span>
             </div>
-        </div>
-    );
+
+            <div className="flex justify-between mt-4 gap-2 w-full">
+              <button
+                className="btn btn-primary w-full"
+                onClick={() => handleViewDetails(course._id)}
+              >
+                View Details
+              </button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default CourseCard;

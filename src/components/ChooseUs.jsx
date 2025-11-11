@@ -1,43 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 
 const ChooseUs = () => {
+    const reasons = [
+        {
+            title: "Expert Instructors",
+            description:
+                "Learn from highly qualified professionals with years of experience in their fields.",
+        },
+        {
+            title: "Flexible Learning",
+            description:
+                "Access courses anytime, anywhere with our fully responsive and user-friendly platform.",
+        },
+        {
+            title: "Career Growth",
+            description:
+                "Get hands-on skills and certifications that help you boost your professional journey.",
+        },
+    ];
+
     return (
-        <div>
-            <div className='text-center'>
-                <h2 className='text-3xl font-bold'>Why Choose Us</h2>
-                <p>Discover the benefits of learning with EduNest and how we stand out from the rest.</p>
-            </div>
-            <div className='grid grid-cols-3 gap-6 justify-center m-8'>
-                <div className="card bg-primary text-primary-content w-96">
-                    <div className="card-body">
-                        <h2 className="card-title">Card title!</h2>
-                        <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-                        <div className="card-actions justify-end">
-                            <button className="btn">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="card bg-primary text-primary-content w-96">
-                    <div className="card-body">
-                        <h2 className="card-title">Card title!</h2>
-                        <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-                        <div className="card-actions justify-end">
-                            <button className="btn">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="card bg-primary text-primary-content w-96">
-                    <div className="card-body">
-                        <h2 className="card-title">Card title!</h2>
-                        <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-                        <div className="card-actions justify-end">
-                            <button className="btn">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
+        <div className="p-6 bg-blue-800 md:p-10 lg:p-16 rounded-lg">
+            <div className="text-center mb-10">
+                <h2 className="text-3xl md:text-4xl font-bold mb-2">🎯 Why Choose Us</h2>
+                <p className="text-white text-sm md:text-base">
+                    Discover the benefits of learning with EduNest and how we stand out from the rest.
+                </p>
             </div>
 
+            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {reasons.map((item, index) => (
+                    <AnimatedCard key={index} item={item} index={index} />
+                ))}
+            </div>
         </div>
+    );
+};
+
+// 🔹 Reusable Animated Card Component
+const AnimatedCard = ({ item, index }) => {
+    const controls = useAnimation();
+    const [ref, setRef] = useState(null);
+
+    useEffect(() => {
+        if (!ref) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        controls.start({
+                            opacity: 1,
+                            y: 0,
+                            transition: { duration: 0.6, delay: index * 0.2 },
+                        });
+                    } else {
+                        controls.start({ opacity: 0, y: 80 }); 
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+        observer.observe(ref);
+        return () => observer.disconnect();
+    }, [ref, controls, index]);
+
+    return (
+        <motion.div
+            ref={setRef}
+            initial={{ opacity: 0, y: 80 }}
+            animate={controls}
+            className="bg-blue-900 text-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition"
+        >
+            <h2 className="text-xl md:text-2xl font-bold mb-3">{item.title}</h2>
+            <p className="text-gray-200 text-sm md:text-base mb-4">{item.description}</p>
+            <button className="btn btn-primary border-none text-white font-semibold hover:bg-yellow-400">
+                Learn More
+            </button>
+        </motion.div>
     );
 };
 
