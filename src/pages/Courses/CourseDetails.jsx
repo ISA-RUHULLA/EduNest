@@ -8,15 +8,15 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const handleEnroll = async () => {
     if (!user) {
       toast.error("Please log in to enroll in this course.");
       return;
     }
-    try{
-      const res = await fetch("http://localhost:5000/enroll", {
+    try {
+      const res = await fetch("https://edu-nest-server-lake.vercel.app/enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -26,9 +26,10 @@ const CourseDetails = () => {
         }),
       });
       const data = await res.json();
-      if(data.success){
-      toast.success("Successfully enrolled in the course!");}
-      else{
+      if (data.success) {
+        toast.success("Successfully enrolled in the course!");
+      }
+      else {
         toast.error(data.message || "Enrollment failed.");
       }
     } catch (error) {
@@ -37,7 +38,7 @@ const CourseDetails = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/courses/${id}`)
+    fetch(`https://edu-nest-server-lake.vercel.app/courses/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch course details");
         return res.json();
@@ -61,23 +62,30 @@ const CourseDetails = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="rounded-lg shadow-lg border overflow-hidden">
-        <img
+    <div className="bg-white p-6">
+      <div className="rounded-lg flex lg:flex-row md:flex-row flex-col shadow-md bg-blue-500 overflow-hidden">
+        <div className="p-4">
+          <img
           src={course.thumbnail}
           alt={course.title}
-          className="w-full h-64 object-cover"
+          className="w-full h-120 border rounded-2xl object-cover"
         />
-        <div className="p-6">
-          <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
-          <p className="text-gray-500 mb-4">By {course.instructor}</p>
+        </div>
+        <div className="p-6 flex flex-col justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
+            <p className="text-xl font-bold mb-4">By : {course.instructor}</p>
 
-          <p className="text-gray-700 mb-4 leading-relaxed">
-            {course.long_description || course.short_description}
-          </p>
-
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-xl font-bold text-blue-600">
+            <p className="text-gray-300 mb-4 leading-relaxed">
+              {course.long_description || course.short_description}
+            </p>
+            <p className="font-bold">Category: {course.category}</p>
+            <p>Duration: {course.duration}</p>
+            <p>Lessons: {course.lessons}</p>
+            <p>Reviews: {course.reviews}</p>
+          </div>
+          <div className="flex justify-between items-center ">
+            <span className="text-xl font-bold text-white">Price: 
               ${course.price}
             </span>
             <span className="text-yellow-500 font-medium">
@@ -88,7 +96,7 @@ const CourseDetails = () => {
           <div className="flex gap-4 mt-4 w-full">
             <button onClick={handleEnroll} className="btn btn-primary w-2/3">Enroll Now</button>
             <Link to="/courses" className="btn btn-outline w-1/3">
-              Back to Courses
+              Back 
             </Link>
           </div>
         </div>

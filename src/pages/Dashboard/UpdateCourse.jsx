@@ -7,7 +7,7 @@ const UpdateCourse = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(true);
-
+ 
     useEffect(() => {
         if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
             toast.error("Invalid course ID");
@@ -15,7 +15,7 @@ const UpdateCourse = () => {
             return;
         }
 
-        fetch(`http://localhost:5000/courses/${id}`)
+        fetch(`https://edu-nest-server-lake.vercel.app/courses/${id}`)
             .then((res) => {
                 if (!res.ok) throw new Error("Course not found");
                 return res.json();
@@ -34,7 +34,7 @@ const UpdateCourse = () => {
         e.preventDefault();
         try {
             const { _id, ...dataToUpdate } = formData; // Remove _id
-            const res = await fetch(`http://localhost:5000/courses/${id}`, {
+            const res = await fetch(`https://edu-nest-server-lake.vercel.app/courses/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dataToUpdate),

@@ -8,7 +8,7 @@ const MyEnrolledCourses = () => {
 
   const fetchEnrolled = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/enroll/${user.email}`);
+      const res = await fetch(`https://edu-nest-server-lake.vercel.app/enroll/${user.email}`);
       const data = await res.json();
       setEnrolledCourses(data);
     } catch (err) {
@@ -26,7 +26,7 @@ const MyEnrolledCourses = () => {
     if (!window.confirm("Are you sure you want to unenroll?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/enroll/${id}`, {
+      const res = await fetch(`https://edu-nest-server-lake.vercel.app/enroll/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();

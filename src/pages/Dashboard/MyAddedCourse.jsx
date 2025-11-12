@@ -13,7 +13,7 @@ const MyAddedCourses = () => {
         if (!user?.email) return; // user null check
         setLoading(true);
 
-        fetch(`http://localhost:5000/courses/user/${user.email}`)
+        fetch(`https://edu-nest-server-lake.vercel.app/courses/user/${user.email}`)
             .then((res) => res.json())
             .then((data) => setCourses(data))
             .catch((err) => toast.error("Failed to fetch courses", err))
@@ -26,7 +26,7 @@ const MyAddedCourses = () => {
         if (!confirm) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/courses/${id}`, { method: "DELETE" });
+            const res = await fetch(`https://edu-nest-server-lake.vercel.app/courses/${id}`, { method: "DELETE" });
             const data = await res.json();
             if (data.success) {
                 toast.success("✅ Course deleted successfully");

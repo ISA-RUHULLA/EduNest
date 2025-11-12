@@ -48,7 +48,7 @@ const Register = () => {
       });
 
       // 3️⃣ Save user info to backend
-      await fetch("http://localhost:5000/users", {
+      await fetch("https://edu-nest-server-lake.vercel.app/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,7 +78,7 @@ const Register = () => {
       const user = result.user;
 
       // Save user info to backend if not already exists
-      await fetch("http://localhost:5000/users", {
+      await fetch("https://edu-nest-server-lake.vercel.app/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

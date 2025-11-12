@@ -4,45 +4,43 @@ import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
     const navigate = useNavigate();
+
     return (
-        <div>
-            <section className="bg-blue-600 text-white py-20">
-                <div className="container mx-auto px-4 text-center">
-                    {/* Heading Animation */}
-                    <motion.h1
-                        className="text-4xl font-bold mb-4"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: 'easeOut' }}
-                    >
-                        Welcome to EduNest
-                    </motion.h1>
+        <section className="bg-white text-center py-20 px-6">
+            <div className="max-w-3xl mx-auto">
+                <motion.h1
+                    className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                >
+                    🎓 Unlock Limitless Learning with Expert-Led Online Courses 🎓
+                </motion.h1>
 
-                    {/* Paragraph Animation */}
-                    <motion.p
-                        className="text-lg mb-8"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-                    >
-                        Your gateway to quality online education.
-                    </motion.p>
+                <motion.p
+                    className="text-gray-600 text-base md:text-lg mb-10"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+                >
+                    Discover a world of knowledge with our top-rated instructors. Learn anytime,
+                    anywhere, and upgrade your skills through practical, engaging, and
+                    career-focused online courses.
+                </motion.p>
 
-                    {/* Button Animation */}
-                    <motion.button
-                        className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate('/dashboard')}
-                    >
-                        Get Started
-                    </motion.button>
-                </div>
-            </section>
-        </div>
+                <motion.button
+                    className="bg-blue-600 text-white font-semibold px-8 py-3 rounded-full shadow-md hover:bg-blue-700 transition"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate('/courses')}
+                >
+                    Explore Courses & Get Started
+                </motion.button>
+            </div>
+        </section>
     );
 };
 

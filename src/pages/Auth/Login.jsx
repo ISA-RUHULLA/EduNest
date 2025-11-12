@@ -19,11 +19,11 @@ const Login = () => {
       const userCredential = await loginUser(email, password);
       const user = userCredential.user;
 
-      const res = await fetch(`http://localhost:5000/users/${user.uid}`);
+      const res = await fetch(`https://edu-nest-server-lake.vercel.app/users/${user.uid}`);
       const data = await res.json();
 
       if (!res.ok || !data?.email) {
-        await fetch("http://localhost:5000/users", {
+        await fetch("https://edu-nest-server-lake.vercel.app/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -53,11 +53,11 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      const res = await fetch(`http://localhost:5000/users/${user.uid}`);
+      const res = await fetch(`https://edu-nest-server-lake.vercel.app/users/${user.uid}`);
       const data = await res.json();
 
       if (!res.ok || !data?.email) {
-        await fetch("http://localhost:5000/users", {
+        await fetch("https://edu-nest-server-lake.vercel.app/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

@@ -1,50 +1,44 @@
+
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
+import { desc } from "framer-motion/client";
 
 const TopInstructors = () => {
-    const [instructors, setInstructors] = useState([]);
-
-    useEffect(() => {
-        fetch("http://localhost:5000/courses")
-            .then((res) => res.json())
-            .then((data) => {
-                const instructorMap = {};
-
-                data.forEach((course) => {
-                    const name = course.instructor;
-                    if (!instructorMap[name]) {
-                        instructorMap[name] = {
-                            name,
-                            totalRating: 0,
-                            courseCount: 0,
-                            thumbnail: course.thumbnail,
-                        };
-                    }
-                    instructorMap[name].totalRating += course.rating;
-                    instructorMap[name].courseCount += 1;
-                });
-
-                const calculated = Object.values(instructorMap).map((inst) => ({
-                    name: inst.name,
-                    avgRating: (inst.totalRating / inst.courseCount).toFixed(2),
-                    courseCount: inst.courseCount,
-                    thumbnail: inst.thumbnail,
-                }));
-
-                const sorted = calculated.sort((a, b) => b.avgRating - a.avgRating);
-                setInstructors(sorted.slice(0, 3));
-            })
-            .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+    const instructors = [
+        {
+            name: "Ayman Sadiq",
+            desc: "Expert in educational content creation and online teaching.",
+            avgRating: 4.9,
+            courseCount: 8,
+            thumbnail: "https://cdn.10minuteschool.com/images/skills/lp/as_onset.jpg",
+        },
+        {
+            name: "Fahad Hossain",
+            desc: "Assistant Professor in the State University of Bangladesh.",
+            avgRating: 4.8,
+            courseCount: 6,
+            thumbnail: "https://webapp.ft.education/storage/teacher_images/mdpNgblL5B7S5VN4k7XMtq5015OrlTIz9K8L1Ica.jpg",
+        },
+        {
+            name: "Md. Numeri Sattar Apar",
+            desc: "Experienced educator and curriculum developer.",
+            avgRating: 4.7,
+            courseCount: 5,
+            thumbnail: "https://static1.personalitydatabase.net/2/pdb-images-prod/e72b521b/profile_images/7472ed67410a4631aefd5a91563cdb96.png",
+        },
+    ];
 
     return (
-        <div className="p-6 my-4 bg-blue-800 rounded-lg">
-            <div>
-                <h2 className=" font-bold mt-10 text-3xl md:text-4xl text-center text-white">
-                🏆 Top Instructors
-            </h2>
-            <p className="text-white text-center mb-10">Meet our top-rated instructors who are experts in their fields and passionate about teaching.</p>
+        <div className="p-6 my-3 bg-white rounded-lg">
+            <div className="text-center">
+                <h2 className="font-bold mt-10 mb-3 text-3xl md:text-4xl text-black">
+                    🏆 Top Instructors
+                </h2>
+                <p className="text-black text-center mb-10">
+                    Meet our top-rated instructors who are experts in br their <br /> fields and passionate about teaching.
+                </p>
             </div>
+
             <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
                 {instructors.map((inst, i) => (
                     <AnimatedInstructorCard key={i} inst={inst} />
@@ -70,7 +64,6 @@ const AnimatedInstructorCard = ({ inst }) => {
                             transition: { duration: 0.6, ease: "easeOut" },
                         });
                     } else {
-                       
                         controls.start({ opacity: 0, y: 100 });
                     }
                 });
@@ -91,9 +84,10 @@ const AnimatedInstructorCard = ({ inst }) => {
             <img
                 src={inst.thumbnail}
                 alt={inst.name}
-                className="w-64 h-64 object-cover rounded-2xl mx-auto mb-3"
+                className="w-64 h-64 object-cover rounded-full mx-auto mb-3"
             />
-            <h3 className="text-lg font-bold text-white">{inst.name}</h3>
+            <h3 className="text-2xl font-bold text-white">{inst.name}</h3>
+            <p className="text-gray-300 mt-2">{inst.desc}</p>
             <p className="text-gray-400 text-sm">{inst.courseCount} Courses</p>
             <p className="mt-2 font-bold text-yellow-500">⭐ {inst.avgRating}</p>
         </motion.div>

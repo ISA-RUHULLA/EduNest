@@ -32,7 +32,7 @@ const AddCourse = () => {
             instructor_email: user?.email,
         };
 
-        fetch("http://localhost:5000/courses", {
+        fetch("https://edu-nest-server-lake.vercel.app/courses", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(courseData),

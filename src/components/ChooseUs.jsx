@@ -21,11 +21,11 @@ const ChooseUs = () => {
     ];
 
     return (
-        <div className="p-6 bg-blue-800 md:p-10 lg:p-16 rounded-lg">
+        <div className="p-6 bg-white md:p-10 lg:p-16 rounded-lg">
             <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-2">🎯 Why Choose Us</h2>
-                <p className="text-white text-sm md:text-base">
-                    Discover the benefits of learning with EduNest and how we stand out from the rest.
+                <h2 className="text-3xl text-black md:text-4xl font-bold mb-3">🎯 Why Choose Us</h2>
+                <p className="text-black text-sm md:text-base">
+                    Discover the benefits of learning with EduNest and <br /> how we stand out from the rest.
                 </p>
             </div>
 

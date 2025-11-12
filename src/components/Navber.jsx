@@ -47,7 +47,7 @@ const Navber = () => {
                 <div className="flex items-center space-x-4">
                     <button
                         onClick={toggleTheme}
-                        className="bg-white text-blue-600 dark:bg-gray-700 dark:text-white font-semibold px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+                        className="hidden md:flex bg-white text-blue-600 dark:bg-gray-700 dark:text-white font-semibold px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
                         {darkMode ? "Light Mode" : "Dark Mode"}
                     </button>

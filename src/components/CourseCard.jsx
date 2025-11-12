@@ -1,51 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loader from "./Loader";
 
 const CourseCard = () => {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/courses")
+    setLoading(true);
+    fetch("https://edu-nest-server-lake.vercel.app/courses")
       .then((res) => res.json())
       .then((data) => {
-        //  Sort & slice 
+       
         const topCourses = data
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 6);
         setCourses(topCourses);
       })
       .catch((error) => console.error("Error fetching courses:", error));
+      setLoading(false);
   }, []);
 
-  //  Handle course details navigation
   const handleViewDetails = (id) => {
     navigate(`/course/${id}`);
   };
+  if(loading){
+    return(
+      <Loader/>
+    )
+  }
 
   return (
-    <div className="p-6 my-4 bg-blue-800 rounded-lg">
+    <div className="p-6 my-4 bg-white rounded-lg">
       <div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center text-white">
-         Top Rated Courses
-      </h2>
-      <p className="text-white text-center mb-10">Explore our top-rated courses, carefully curated to help you <br /> achieve your learning goals with expert instructors and comprehensive content.</p>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center text-black">
+          Top Rated Courses
+        </h2>
+        <p className="text-black text-center mb-10">Explore our top-rated courses, carefully curated to help you achieve your  <br /> learning goals with expert instructors and comprehensive content.</p>
       </div>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
         {courses.map((course, index) => (
           <motion.div
             key={course._id}
-            initial={{ opacity: 0, y: 60 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.6,
-              delay: index * 0.15, 
+              duration: 0.18,
+              delay: index * 0.08,
               ease: "easeOut",
             }}
-            viewport={{ once: false, amount: 0.2 }}
-            className="rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300  bg-blue-900 text-white text-center"
+            viewport={{ once: true, amount: 0.2 }}
+            whileHover={{
+              scale: 1.05,
+              y: -5,
+              boxShadow: "0 10px 20px rgba(0, 0, 0, 0.3)",
+            }}
+            className="rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300  bg-blue-900 text-white flex flex-col text-center"
           >
             <img
               src={course.thumbnail}
@@ -63,7 +76,7 @@ const CourseCard = () => {
               </span>
             </div>
 
-            <div className="flex justify-between mt-4 gap-2 w-full">
+            <div className="flex justify-between mt-auto pt-4 gap-2 w-full">
               <button
                 className="btn btn-primary w-full"
                 onClick={() => handleViewDetails(course._id)}
