@@ -6,10 +6,10 @@ const Hero = () => {
     const navigate = useNavigate();
 
     return (
-        <section className="bg-white text-center py-20 px-6">
+        <section className=" text-center py-20 px-6 rounded-lg shadow dark:bg-gray-400">
             <div className="max-w-3xl mx-auto">
                 <motion.h1
-                    className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight"
+                    className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-6 leading-tight"
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -18,7 +18,7 @@ const Hero = () => {
                 </motion.h1>
 
                 <motion.p
-                    className="text-gray-600 text-base md:text-lg mb-10"
+                    className=" text-base-content md:text-lg mb-10"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}

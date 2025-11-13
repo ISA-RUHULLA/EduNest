@@ -39,12 +39,12 @@ const CourseCard = () => {
   }
 
   return (
-    <div className="p-6 my-4 bg-white rounded-lg">
+    <div className="p-6 my-4 rounded-lg dark:bg-gray-400 shadow">
       <div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center text-black">
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center dark:text-white">
           Top Rated Courses
         </h2>
-        <p className="text-black text-center mb-10">Explore our top-rated courses, carefully curated to help you achieve your  <br /> learning goals with expert instructors and comprehensive content.</p>
+        <p className="text-base-content text-center mb-10">Explore our top-rated courses, carefully curated to help you achieve your  <br /> learning goals with expert instructors and comprehensive content.</p>
       </div>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">

@@ -52,9 +52,9 @@ const CourseCard = () => {
     }
 
     return (
-        <div className="p-6 md:p-10 bg-white rounded-lg my-4">
+        <div className="p-6 md:p-10 dark:bg-gray-400 rounded-lg my-4 shadow">
             <div>
-                <h2 className="text-2xl md:text-4xl text-black font-bold mb-6 text-center">🏆 Top Rated Courses</h2>
+                <h2 className="text-2xl md:text-4xl dark:text-white font-bold mb-6 text-center">🏆 Top Rated Courses</h2>
                 <p className="text-black text-center mb-6">
                     Explore our top-rated courses, carefully curated to <br /> help you achieve your learning goals.
                 </p>
@@ -117,16 +117,16 @@ const AnimatedCourseCard = ({ course, handleViewDetails }) => {
                 boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
             }}
 
-            className="border rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300 bg-blue-900 flex flex-col text-center"
+            className=" rounded-xl shadow-lg p-4 hover:shadow-2xl transition-shadow duration-300 bg-blue-900 flex flex-col text-center"
         >
             <img
                 src={course.thumbnail}
                 alt={course.title}
                 className="rounded-lg mb-3 w-full h-80 object-cover"
             />
-            <h2 className="text-lg font-semibold">{course.title}</h2>
-            <p className="text-gray-500 text-sm">{course.instructor}</p>
-            <p className="text-sm mt-2">{course.short_description}</p>
+            <h2 className="text-lg text-white font-semibold">{course.title}</h2>
+            <p className="text-white text-sm">{course.instructor}</p>
+            <p className="text-sm text-white mt-2">{course.short_description}</p>
             <div className="flex justify-between items-center mt-3">
                 <span className="font-bold text-blue-600">${course.price}</span>
                 <span className="text-yellow-500 font-medium">⭐ {course.rating}</span>

@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useTheme from "../hooks/useTheme";
+import ToggleButton from "./ToggleButton";
 
 const Navber = () => {
-    const { user, logoutUser, theme, toggleTheme } = useAuth();
+    const { user, logoutUser } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className="bg-blue-600 text-white p-4">
+        <header className="bg-blue-600 text-white p-4 transition-colors duration-300">
             <div className="flex justify-between items-center">
                 {/* Brand Name */}
                 <h1 className="text-3xl md:text-4xl font-bold">
@@ -24,12 +27,10 @@ const Navber = () => {
 
                 {/* Right Section */}
                 <div className="flex items-center space-x-4">
-                    <button
-                        onClick={toggleTheme}
-                        className="hidden md:flex bg-white text-blue-600 dark:bg-gray-700 dark:text-white font-semibold px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-                    >
-                        {theme === "dark" ? "☀️" : "🌙"}
-                    </button>
+                    {/* ✅ Toggle Button */}
+                    <ToggleButton theme={theme} toggleTheme={toggleTheme} />
+
+                    {/* User Avatar / Login */}
                     {user ? (
                         <>
                             {user.photoURL ? (
@@ -44,7 +45,7 @@ const Navber = () => {
                                 </div>
                             )}
                             <button
-                                className="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-200"
+                                className="hidden md:flex bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-200"
                                 onClick={logoutUser}
                             >
                                 Logout
@@ -52,7 +53,7 @@ const Navber = () => {
                         </>
                     ) : (
                         <Link
-                            className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200"
+                            className="hidden md:flex bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200"
                             to="/login"
                         >
                             Login
@@ -78,6 +79,23 @@ const Navber = () => {
                     <Link to="/courses" className="hover:underline" onClick={() => setIsOpen(false)}>Courses</Link>
                     {user && <Link to="/dashboard" className="hover:underline" onClick={() => setIsOpen(false)}>Dashboard</Link>}
                     <Link to="/about" className="hover:underline" onClick={() => setIsOpen(false)}>About Us</Link>
+                    {user ? (
+                        <>
+                            <button
+                                className="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-200"
+                                onClick={logoutUser}
+                            >
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <Link
+                            className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200"
+                            to="/login"
+                        >
+                            Login
+                        </Link>
+                    )}
                 </nav>
             )}
         </header>

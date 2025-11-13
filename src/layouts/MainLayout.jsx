@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 const MainLayout = () => {
   return (
-    <div  className="max-w-[1440px] mx-auto bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
+    <div  className="max-w-[1440px] mx-auto min-h-screen">
       {/* Header */}
       <Navber />
 

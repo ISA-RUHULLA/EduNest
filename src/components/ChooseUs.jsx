@@ -21,9 +21,9 @@ const ChooseUs = () => {
     ];
 
     return (
-        <div className="p-6 bg-white md:p-10 lg:p-16 rounded-lg">
+        <div className="p-6 dark:bg-gray-400 md:p-10 lg:p-16 rounded-lg shadow">
             <div className="text-center mb-10">
-                <h2 className="text-3xl text-black md:text-4xl font-bold mb-3">🎯 Why Choose Us</h2>
+                <h2 className="text-3xl dark:text-white md:text-4xl font-bold mb-3">🎯 Why Choose Us</h2>
                 <p className="text-black text-sm md:text-base">
                     Discover the benefits of learning with EduNest and <br /> how we stand out from the rest.
                 </p>
@@ -38,7 +38,7 @@ const ChooseUs = () => {
     );
 };
 
-// 🔹 Reusable Animated Card Component
+// Reusable Animated Card Component
 const AnimatedCard = ({ item, index }) => {
     const controls = useAnimation();
     const [ref, setRef] = useState(null);

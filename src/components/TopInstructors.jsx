@@ -29,12 +29,12 @@ const TopInstructors = () => {
     ];
 
     return (
-        <div className="p-6 my-3 bg-white rounded-lg">
+        <div className="p-6 my-3 dark:bg-gray-400 rounded-lg shadow">
             <div className="text-center">
                 <h2 className="font-bold mt-10 mb-3 text-3xl md:text-4xl text-black">
                     🏆 Top Instructors
                 </h2>
-                <p className="text-black text-center mb-10">
+                <p className="dark:text-white text-center mb-10">
                     Meet our top-rated instructors who are experts in br their <br /> fields and passionate about teaching.
                 </p>
             </div>
@@ -79,7 +79,7 @@ const AnimatedInstructorCard = ({ inst }) => {
             ref={setRef}
             initial={{ opacity: 0, y: 100 }}
             animate={controls}
-            className="bg-blue-900 border rounded-xl shadow-lg p-4 text-center hover:shadow-2xl transition"
+            className="bg-blue-900  rounded-xl shadow-lg p-4 text-center hover:shadow-2xl transition"
         >
             <img
                 src={inst.thumbnail}

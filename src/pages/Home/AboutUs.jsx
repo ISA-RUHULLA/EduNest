@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const AboutUs = () => {
   return (
-    <section className="bg-gradient-to-b from-blue-50 to-white py-16">
+    <section className="dark:bg-gray-400 py-16 shadow">
       <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
