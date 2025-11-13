@@ -3,29 +3,8 @@ import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const Navber = () => {
-    const { user, logoutUser } = useAuth();
+    const { user, logoutUser, theme, toggleTheme } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
-            setDarkMode(true);
-            document.documentElement.classList.add("dark");
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        if (darkMode) {
-            document.documentElement.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-            setDarkMode(false);
-        } else {
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-            setDarkMode(true);
-        }
-    };
 
     return (
         <header className="bg-blue-600 text-white p-4">
@@ -49,7 +28,7 @@ const Navber = () => {
                         onClick={toggleTheme}
                         className="hidden md:flex bg-white text-blue-600 dark:bg-gray-700 dark:text-white font-semibold px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
-                        {darkMode ? "Light Mode" : "Dark Mode"}
+                        {theme === "dark" ? "☀️" : "🌙"}
                     </button>
                     {user ? (
                         <>

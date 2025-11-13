@@ -15,9 +15,31 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // 🔹 true দিয়ে শুরু
+    const [loading, setLoading] = useState(true);
+    const [theme, setTheme] = useState("light");
 
-    // Firebase persistence set করা
+    useEffect(() => {
+        const saveTheme = localStorage.getItem("theme") || "light";
+        setTheme(saveTheme);
+        if (saveTheme === "dark") {
+            document.documentElement.classList.add("dark");
+        }
+        else {
+            document.documentElement.classList.remove("dark");
+        }
+    }, [])
+    const toggleTheme = () => {
+        if (theme === "light") {
+            setTheme("dark");
+            localStorage.setItem("theme", "dark");
+            document.documentElement.classList.add("dark");
+        } else {
+            setTheme("light");
+            localStorage.setItem("theme", "light");
+            document.documentElement.classList.remove("dark");
+        }
+    };
+
     useEffect(() => {
         setPersistence(auth, browserLocalPersistence).catch(err => console.error(err));
     }, []);
@@ -83,6 +105,8 @@ const AuthProvider = ({ children }) => {
         logoutUser,
         setLoading,
         auth,
+        theme,
+        toggleTheme,
     };
 
     return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;

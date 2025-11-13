@@ -41,11 +41,11 @@ const MyEnrolledCourses = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4">My Enrolled Courses</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 className="text-2xl text-center font-bold mb-4">My Enrolled Courses</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {enrolledCourses.length === 0 && <p>No courses enrolled yet.</p>}
         {enrolledCourses.map(course => (
-          <div key={course._id} className="border p-4 rounded shadow">
+          <div key={course._id} className="grid bg-blue-900 p-4 rounded-lg shadow">
             <h3 className="font-semibold">{course.courseTitle}</h3>
             <button
               className="btn btn-sm btn-error mt-2"
