@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loader from "./Loader";
+import axios from "axios";
 
 const CourseCard = () => {
   const [courses, setCourses] = useState([]);
@@ -10,25 +11,30 @@ const CourseCard = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("https://edu-nest-server-lake.vercel.app/courses")
-      .then((res) => res.json())
-      .then((data) => {
-       
-        const topCourses = data
+    axios
+      .get("https://edu-nest-server-lake.vercel.app/courses")
+      // .then((res) => res.json())
+      .then((res) => {
+
+        const topCourses = res.data
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 6);
         setCourses(topCourses);
+        setLoading(false);
       })
-      .catch((error) => console.error("Error fetching courses:", error));
-      setLoading(false);
+      .catch((error) => {
+        console.error("Error fetching courses:", error)
+        setLoading(false);
+      });
+
   }, []);
 
   const handleViewDetails = (id) => {
     navigate(`/course/${id}`);
   };
-  if(loading){
-    return(
-      <Loader/>
+  if (loading) {
+    return (
+      <Loader />
     )
   }
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useAnimation } from "framer-motion";
 import Loader from "../../components/Loader"
+import axios from "axios";
 
 const CourseCard = () => {
     const [courses, setCourses] = useState([]);
@@ -13,10 +14,9 @@ const CourseCard = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch("https://edu-nest-server-lake.vercel.app/courses")
-            .then((res) => res.json())
-            .then((data) => {
-                const sorted = data.sort((a, b) => b.rating - a.rating);
+        axios.get("https://edu-nest-server-lake.vercel.app/courses")
+            .then((res) => {
+                const sorted = res.data.sort((a, b) => b.rating - a.rating);
                 setCourses(sorted);
                 setFilteredCourses(sorted);
 
@@ -24,8 +24,11 @@ const CourseCard = () => {
                 const cats = ["All", ...new Set(data.map(course => course.category))];
                 setCategories(cats);
             })
-            .catch((error) => console.error("Error fetching courses:", error));
-            setLoading(false);
+            .catch((error) => {
+                console.error("Error fetching courses:", error)
+                setLoading(false);
+            });
+            
     }, []);
 
     

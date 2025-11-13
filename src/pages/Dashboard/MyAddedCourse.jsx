@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 const MyAddedCourses = () => {
     const { user } = useAuth();
@@ -13,9 +14,9 @@ const MyAddedCourses = () => {
         if (!user?.email) return; // user null check
         setLoading(true);
 
-        fetch(`https://edu-nest-server-lake.vercel.app/courses/user/${user.email}`)
-            .then((res) => res.json())
-            .then((data) => setCourses(data))
+        axios
+        .get(`https://edu-nest-server-lake.vercel.app/courses/user/${user.email}`)
+            .then((res) => setCourses(res.data))
             .catch((err) => toast.error("Failed to fetch courses", err))
             .finally(() => setLoading(false));
     }, [user]);

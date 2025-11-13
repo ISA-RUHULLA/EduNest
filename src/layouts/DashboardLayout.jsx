@@ -14,11 +14,12 @@ const DashboardLayout = () => {
             <div>
                 <Navber />
             </div>
-            <div className="flex min-h-screen">
+            <div>
                
-                <aside className="lg:w-64 md:w-50 sm:w-20 bg-blue-800 text-white p-6">
+               
+                <div className="flex justify-center bg-blue-800 text-white p-2">
                     <DashNavbar />
-                </aside>
+                </div>
                 <main className="flex-1 p-6 bg-blue-300">
                     <Outlet />
                 </main>

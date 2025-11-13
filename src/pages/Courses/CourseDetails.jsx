@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -38,13 +39,10 @@ const CourseDetails = () => {
   };
 
   useEffect(() => {
-    fetch(`https://edu-nest-server-lake.vercel.app/courses/${id}`)
+    axios
+    .get(`https://edu-nest-server-lake.vercel.app/courses/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch course details");
-        return res.json();
-      })
-      .then((data) => {
-        setCourse(data);
+        setCourse(res.data);
         setLoading(false);
       })
       .catch((error) => {
