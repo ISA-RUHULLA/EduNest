@@ -1,6 +1,6 @@
 # EduNest Online Learning Platform
 
-Live Site: [https://your-client-site-url.netlify.app](https://your-client-site-url.netlify.app)
+Live Site: https://edunestbyisaruhulla.netlify.app/
 
 ## Project Overview
 EduNest is a full-stack online learning platform where users can explore, enroll, and manage courses. Instructors can add, update, and manage their courses while students can browse and enroll seamlessly. The platform emphasizes smooth interaction, intuitive UI, and efficient data management.
